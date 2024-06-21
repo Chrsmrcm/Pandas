@@ -1,12 +1,13 @@
 '''
 CSV data will need to be sanitized.  Namely the founded year.  It is a str field and has no standardization
 '''
-
+import math
 import json
 import pandas
 import pathlib
 import yfinance
 import datetime
+import matplotlib.pyplot
 
 today = datetime.date.today()
 config_path = pathlib.Path.cwd() / "shared" / "config.json"
@@ -30,7 +31,9 @@ symbols = list(tickers["Adj Close"].columns)
 closing_avg = []
 age = []
 for i in range(len(symbols)):
+    print(symbols[i],tickers["Adj Close"][symbols[i]].mean(),today.year - int(csv_data[csv_data.Symbol == symbols[i]].Founded))
     closing_avg.append(tickers["Adj Close"][symbols[i]].mean())
     age.append(today.year - int(csv_data[csv_data.Symbol == symbols[i]].Founded))
-    
 
+matplotlib.pyplot.plot(age,closing_avg)
+matplotlib.pyplot.show()
